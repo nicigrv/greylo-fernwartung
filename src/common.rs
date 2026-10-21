@@ -2460,6 +2460,7 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
 }
 
 pub fn load_custom_client() {
+    apply_greylo_branding();
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());
@@ -2628,6 +2629,24 @@ pub fn read_custom_client(config: &str) {
                 .insert(k, v.to_owned());
         };
     }
+    apply_greylo_branding();
+}
+
+// greylo Fernwartung: fester Name, eigener Server und nur eingehende Verbindungen (Kunden empfangen Hilfe).
+fn apply_greylo_branding() {
+    const SERVER: &str = "rustdesk.server.greylo.de";
+    const KEY: &str = "pjsRKWO1ISJhoUyh18A4VmfAWsEkTvCXihu020zX9Ms=";
+    *config::APP_NAME.write().unwrap() = "greylo Fernwartung".to_owned();
+    {
+        let mut settings = config::OVERWRITE_SETTINGS.write().unwrap();
+        settings.insert("custom-rendezvous-server".to_owned(), SERVER.to_owned());
+        settings.insert("relay-server".to_owned(), SERVER.to_owned());
+        settings.insert("key".to_owned(), KEY.to_owned());
+    }
+    config::HARD_SETTINGS
+        .write()
+        .unwrap()
+        .insert("conn-type".to_owned(), "incoming".to_owned());
 }
 
 #[inline]

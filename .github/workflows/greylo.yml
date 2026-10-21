@@ -1,0 +1,24 @@
+name: greylo Fernwartung bauen
+
+# Baut den greylo-Fernwartungs-Client (Windows, macOS, Android) und legt die Dateien
+# im Release "greylo" ab. Startet bei jedem Push auf den Branch greylo oder per Hand.
+on:
+  push:
+    branches: [greylo]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: greylo-build
+  cancel-in-progress: true
+
+jobs:
+  bauen:
+    uses: ./.github/workflows/flutter-build.yml
+    secrets: inherit
+    with:
+      upload-artifact: true
+      upload-tag: "greylo"
+      publish-update-metadata: false
