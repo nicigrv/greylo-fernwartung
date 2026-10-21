@@ -2632,11 +2632,12 @@ pub fn read_custom_client(config: &str) {
     apply_greylo_branding();
 }
 
-// greylo Fernwartung: fester Name, eigener Server und nur eingehende Verbindungen (Kunden empfangen Hilfe).
+// greylo Fernwartung: fester Name (ohne Leerzeichen, der Windows-Installer setzt ihn ungequotet in sc/taskkill ein),
+// eigener Server und nur eingehende Verbindungen (Kunden empfangen Hilfe).
 fn apply_greylo_branding() {
     const SERVER: &str = "rustdesk.server.greylo.de";
     const KEY: &str = "pjsRKWO1ISJhoUyh18A4VmfAWsEkTvCXihu020zX9Ms=";
-    *config::APP_NAME.write().unwrap() = "greylo Fernwartung".to_owned();
+    *config::APP_NAME.write().unwrap() = "greylo-Fernwartung".to_owned();
     {
         let mut settings = config::OVERWRITE_SETTINGS.write().unwrap();
         settings.insert("custom-rendezvous-server".to_owned(), SERVER.to_owned());
